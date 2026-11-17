@@ -21,7 +21,7 @@ module "vlan_20_core" {
   vlan_id                 = 20
   name                    = "Core Microservices & Ingress"
   cidr                    = "10.10.20.0/24"
-  gateway                 = "10.10.10.132"
+  gateway                 = "10.10.10.1"
   default_firewall_policy = "DROP"
 }
 
@@ -30,7 +30,7 @@ module "vlan_30_cyber" {
   vlan_id                 = 30
   name                    = "CyberLab & Malware Sandboxes"
   cidr                    = "10.10.30.0/24"
-  gateway                 = "10.10.10.132"
+  gateway                 = "10.10.10.1"
   default_firewall_policy = "DROP"
 }
 
@@ -39,7 +39,7 @@ module "vlan_40_dmz" {
   vlan_id                 = 40
   name                    = "DMZ Deception & Honeypots"
   cidr                    = "10.10.40.0/24"
-  gateway                 = "10.10.10.132"
+  gateway                 = "10.10.10.1"
   default_firewall_policy = "DROP"
 }
 
@@ -48,7 +48,7 @@ module "vlan_50_iot" {
   vlan_id                 = 50
   name                    = "IoT & Physical Edge Sensors"
   cidr                    = "10.10.50.0/24"
-  gateway                 = "10.10.10.132"
+  gateway                 = "10.10.10.1"
   default_firewall_policy = "DROP"
 }
 
