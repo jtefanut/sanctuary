@@ -2,7 +2,7 @@
 services_base_path: "/opt"
 
 docker_compose_version: "v2"
-docker_network_name: "pve1.stefanut"
+docker_network_name: "homelab.example"
 
 default_timezone: "Europe/Bucharest"
 manage_python: true
@@ -23,4 +23,4 @@ homelab_services:
   - uptime-kuma
   - vaultwarden
 
-deploy_user: "root"
+deploy_user: "ansible"

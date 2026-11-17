@@ -1,0 +1,14 @@
+# Local secrets and runtime state
+.env
+.env.*
+!.env.example
+*.tfstate
+*.tfstate.*
+.terraform/
+*.tfvars
+!*.tfvars.example
+ansible/group_vars/all/vault.yml
+*.pem
+*.key
+*.p12
+*.pfx

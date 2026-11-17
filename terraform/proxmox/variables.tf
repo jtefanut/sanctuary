@@ -1,20 +1,18 @@
 variable "proxmox_endpoint" {
   type        = string
-  description = "Proxmox VE REST API URL (e.g. https://192.168.1.132:8006/)"
-  default     = "https://192.168.1.132:8006/"
+  description = "Proxmox VE REST API URL; set locally via TF_VAR_proxmox_endpoint"
 }
 
 variable "proxmox_api_token" {
   type        = string
   description = "Proxmox VE API Token (USER@REALM!TOKENID=UUID)"
   sensitive   = true
-  default     = "root@pam!terraform=00000000-0000-0000-0000-000000000000"
 }
 
 variable "proxmox_insecure" {
   type        = bool
   description = "Disable TLS certificate validation for internal self-signed certs"
-  default     = true
+  default     = false
 }
 
 variable "primary_node" {
@@ -26,13 +24,13 @@ variable "primary_node" {
 variable "gateway_ip" {
   type        = string
   description = "Default LAN gateway IP"
-  default     = "192.168.1.1"
+  default     = "10.10.10.1"
 }
 
 variable "nameserver_ip" {
   type        = string
   description = "Default DNS nameserver IP"
-  default     = "192.168.1.1"
+  default     = "10.10.10.1"
 }
 
 variable "debian_template" {
