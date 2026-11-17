@@ -10,12 +10,12 @@ system_locale: "en_US.UTF-8"
 # Network & DNS Baseline
 domain_name: "homelab.internal"
 nameservers:
-  - 192.168.1.1
-  - 192.168.1.4
+  - 10.10.10.1
+  - 10.10.10.4
   - 1.1.1.1
 
 ntp_servers:
-  - 192.168.1.1
+  - 10.10.10.1
   - 0.ro.pool.ntp.org
   - 1.ro.pool.ntp.org
   - time.cloudflare.com
@@ -27,7 +27,7 @@ admin_groups:
   - wheel
 
 admin_authorized_keys:
-  - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIExampleHomelabManagementKey2026 admin@homelab"
+  # Add your own public SSH key locally; do not publish personal keys.
 
 # Common Baseline Packages for Debian/Ubuntu/Alpine
 common_packages_debian:
