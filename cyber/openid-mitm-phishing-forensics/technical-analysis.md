@@ -6,7 +6,7 @@
 
 All forensic probing, DOM deconstruction, and network traffic captures were executed inside a tightly isolated sandbox environment:
 
-- **Host Infrastructure:** Proxmox VE 9.2 hypervisor host (`pve_primary_x64`, `192.168.1.132`).
+- **Host Infrastructure:** Proxmox VE 9.2 hypervisor host (`proxmox-lab.example`, `192.0.2.132`).
 - **Research Guest:** Windows 10 Enterprise VM (NAT network profile, strict layer-2 isolation from production subnets).
 - **Test Accounts:** Two synthetic, disposable Steam accounts created via temporary email services (`temp-mail.org`), populated with low-value testing items to observe automated bot behavior.
 - **Interception Tools:** Fiddler Classic & Wireshark on guest VM; perimeter packet captures via OPNsense Suricata IDS.

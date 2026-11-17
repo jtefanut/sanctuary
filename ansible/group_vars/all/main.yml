@@ -8,7 +8,7 @@ system_timezone: "Europe/Bucharest"
 system_locale: "en_US.UTF-8"
 
 # Network & DNS Baseline
-domain_name: "homelab.internal"
+domain_name: "example.invalid"
 nameservers:
   - 10.10.10.1
   - 10.10.10.4
@@ -26,8 +26,7 @@ admin_groups:
   - sudo
   - wheel
 
-admin_authorized_keys:
-  # Add your own public SSH key locally; do not publish personal keys.
+admin_authorized_keys: [] # Add your own public SSH key locally; do not publish personal keys.
 
 # Common Baseline Packages for Debian/Ubuntu/Alpine
 common_packages_debian:

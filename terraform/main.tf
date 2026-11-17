@@ -58,7 +58,7 @@ module "vlan_50_iot" {
 module "vm_opnsense_200" {
   source       = "./modules/proxmox_vm"
   target_node  = var.primary_node
-  vmid = 1200
+  vmid = 900
   name         = "opnsense"
   description  = "OPNsense Perimeter Stateful Firewall, Suricata IDS/IPS & WireGuard Kernel Rotator"
   cores        = 2
@@ -73,7 +73,7 @@ module "vm_opnsense_200" {
 module "vm_openstack_201" {
   source       = "./modules/proxmox_vm"
   target_node  = var.primary_node
-  vmid = 1201
+  vmid = 901
   name         = "openstack"
   description  = "OpenStack Enterprise Private Cloud Controller & Compute (Nova, Neutron, Keystone, Glance, Horizon Dashboard)"
   cores        = 2
@@ -88,7 +88,7 @@ module "vm_openstack_201" {
 module "vm_metasploitable2_202" {
   source       = "./modules/proxmox_vm"
   target_node  = var.primary_node
-  vmid = 1202
+  vmid = 902
   name         = "metasploitable2"
   description  = "Metasploitable 2 (Intentionally Vulnerable Linux Target, Penetration Testing & IDS/IPS Tuning)"
   cores        = 1
@@ -102,7 +102,7 @@ module "vm_metasploitable2_202" {
 module "vm_tpot_203" {
   source       = "./modules/proxmox_vm"
   target_node  = var.primary_node
-  vmid = 1203
+  vmid = 903
   name         = "tpot-honeypot"
   description  = "T-Pot Multi-Honeypot Decoy Platform (Cowrie, Dionaea, Honeytrap, Elastic, Kibana, Suricata)"
   cores        = 4
@@ -117,7 +117,7 @@ module "vm_tpot_203" {
 module "vm_securityonion_204" {
   source       = "./modules/proxmox_vm"
   target_node  = var.primary_node
-  vmid = 1204
+  vmid = 904
   name         = "securityonion"
   description  = "Security Onion / Wazuh SIEM Platform (Zeek, Suricata, Elastic, Kibana & HIDS Monitoring)"
   cores        = 4
@@ -132,7 +132,7 @@ module "vm_securityonion_204" {
 module "vm_remnux_205" {
   source       = "./modules/proxmox_vm"
   target_node  = var.primary_node
-  vmid = 1205
+  vmid = 905
   name         = "remnux"
   description  = "REMnux Linux Toolkit (Malware Analysis, Reverse Engineering, Memory Forensics & DFIR)"
   cores        = 2
@@ -152,19 +152,19 @@ module "vm_remnux_205" {
 
 
 
-# Ingress Reverse Proxy runs natively on OPNsense Core (VM 200 - 10.10.10.134)
+# Ingress Reverse Proxy runs natively on OPNsense Core (VM 200 - 10.10.10.2)
 
 
 
 # ------------------------------------------------------------------------------
 # 3. PROXMOX CORE LXC CONTAINERS (NODE 1 — Intel Core i3-10100F)
-# Active Containers: 100 to 106
+# Example Containers: 900 to 912
 # ------------------------------------------------------------------------------
 
 module "lxc_homeassistant" {
   source       = "./modules/proxmox_lxc"
   target_node  = var.primary_node
-  vmid = 1100
+  vmid = 906
   hostname     = "homeassistant"
   ostemplate   = var.debian_template
   ostype       = "debian"
@@ -176,116 +176,116 @@ module "lxc_homeassistant" {
   nameserver   = var.nameserver_ip
   vlan_tag     = 20
   unprivileged = true
-  tags         = ["automation", "iot", "smart-home", "zigbee", "terraform", "node1"]
+  tags         = ["automation", "iot", "smart-home", "zigbee", "terraform", "example-node"]
 }
 
 module "lxc_scrutiny" {
   source       = "./modules/proxmox_lxc"
   target_node  = var.primary_node
-  vmid = 1101
+  vmid = 907
   hostname     = "scrutiny"
   ostemplate   = var.debian_template
   ostype       = "debian"
   cores        = 1
   memory       = 128
   disk_size    = "4G"
-  ip_address   = "10.10.10.108/24"
+  ip_address   = "10.10.10.11/24"
   gateway      = var.gateway_ip
   nameserver   = var.nameserver_ip
   vlan_tag     = 20
   unprivileged = true
-  tags         = ["monitoring", "smart", "storage", "telemetry", "terraform", "node1"]
+  tags         = ["monitoring", "smart", "storage", "telemetry", "terraform", "example-node"]
 }
 
 module "lxc_ollama" {
   source                 = "./modules/proxmox_lxc"
   target_node            = var.primary_node
-  vmid = 1102
+  vmid = 908
   hostname               = "ollama"
   ostemplate             = var.debian_template
   ostype                 = "debian"
   cores                  = 4
   memory                 = 2048
   disk_size              = "16G"
-  ip_address             = "10.10.10.110/24"
+  ip_address             = "10.10.10.12/24"
   gateway                = var.gateway_ip
   nameserver             = var.nameserver_ip
   vlan_tag               = 20
   unprivileged           = false
   passthrough_nvidia_gpu = true
-  tags                   = ["ai", "llm", "cuda", "gtx1050ti", "local-ai", "terraform", "node1"]
+  tags                   = ["ai", "llm", "cuda", "gtx1050ti", "local-ai", "terraform", "example-node"]
 }
 
 module "lxc_uptimekuma" {
   source       = "./modules/proxmox_lxc"
   target_node  = var.primary_node
-  vmid = 1103
+  vmid = 909
   hostname     = "uptimekuma"
   ostemplate   = var.alpine_template
   ostype       = "alpine"
   cores        = 1
   memory       = 128
   disk_size    = "2G"
-  ip_address   = "10.10.10.119/24"
+  ip_address   = "10.10.10.13/24"
   gateway      = var.gateway_ip
   nameserver   = var.nameserver_ip
   vlan_tag     = 20
   unprivileged = true
-  tags         = ["monitoring", "uptime", "status", "terraform", "node1"]
+  tags         = ["monitoring", "uptime", "status", "terraform", "example-node"]
 }
 
 module "lxc_monitoring" {
   source       = "./modules/proxmox_lxc"
   target_node  = var.primary_node
-  vmid = 1104
+  vmid = 910
   hostname     = "monitoring"
   ostemplate   = var.alpine_template
   ostype       = "alpine"
   cores        = 1
   memory       = 256
   disk_size    = "4G"
-  ip_address   = "10.10.10.121/24"
+  ip_address   = "10.10.10.14/24"
   gateway      = var.gateway_ip
   nameserver   = var.nameserver_ip
   vlan_tag     = 20
   unprivileged = true
-  tags         = ["monitoring", "prometheus", "grafana", "terraform", "node1"]
+  tags         = ["monitoring", "prometheus", "grafana", "terraform", "example-node"]
 }
 
 module "lxc_owasp" {
   source       = "./modules/proxmox_lxc"
   target_node  = var.primary_node
-  vmid = 1105
+  vmid = 911
   hostname     = "owasp"
   ostemplate   = var.alpine_template
   ostype       = "alpine"
   cores        = 2
   memory       = 512
   disk_size    = "8G"
-  ip_address   = "10.10.10.175/24"
+  ip_address   = "10.10.10.15/24"
   gateway      = var.gateway_ip
   nameserver   = var.nameserver_ip
   vlan_tag     = 20
   unprivileged = true
-  tags         = ["cyber", "owasp", "pentest", "security", "terraform", "node1"]
+  tags         = ["cyber", "owasp", "pentest", "security", "terraform", "example-node"]
 }
 
 module "lxc_wazuh" {
   source       = "./modules/proxmox_lxc"
   target_node  = var.primary_node
-  vmid = 1106
+  vmid = 912
   hostname     = "wazuh"
   ostemplate   = var.debian_template
   ostype       = "ubuntu"
   cores        = 4
   memory       = 6144
   disk_size    = "35G"
-  ip_address   = "10.10.10.240/24"
+  ip_address   = "10.10.10.16/24"
   gateway      = var.gateway_ip
   nameserver   = var.nameserver_ip
   vlan_tag     = 20
   unprivileged = true
-  tags         = ["cyber", "siem", "xdr", "wazuh", "terraform", "node1"]
+  tags         = ["cyber", "siem", "xdr", "wazuh", "terraform", "example-node"]
 }
 
 # ------------------------------------------------------------------------------
