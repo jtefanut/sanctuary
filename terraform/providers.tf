@@ -12,8 +12,8 @@ terraform {
     bucket                      = "terraform-state"
     key                         = "infrastructure/terraform.tfstate"
     region                      = "us-east-1"
-    endpoint                    = "http://192.168.1.161:9000" # MinIO CT 161 / PBS S3 API
-    dynamodb_endpoint           = "http://192.168.1.161:9000" # DynamoDB-compatible state lock table
+    endpoint                    = "http://10.10.10.161:9000" # MinIO CT 161 / PBS S3 API
+    dynamodb_endpoint           = "http://10.10.10.161:9000" # DynamoDB-compatible state lock table
     dynamodb_table              = "terraform-locks"
     encrypt                     = true
     skip_credentials_validation = true
