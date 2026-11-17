@@ -1,7 +1,7 @@
 # ==============================================================================
 # HOMELAB INFRASTRUCTURE AS CODE — MASTER DECLARATION
 # Provider: bpg/proxmox (Proxmox VE REST API)
-# Hardware: Intel Core i3-10100F (Node 1 x86_64)
+# Hardware: generic x86_64 virtualization host
 # ==============================================================================
 
 # ------------------------------------------------------------------------------
@@ -58,7 +58,7 @@ module "vlan_50_iot" {
 module "vm_opnsense_200" {
   source       = "./modules/proxmox_vm"
   target_node  = var.primary_node
-  vmid         = 200
+  vmid = 1200
   name         = "opnsense"
   description  = "OPNsense Perimeter Stateful Firewall, Suricata IDS/IPS & WireGuard Kernel Rotator"
   cores        = 2
@@ -73,7 +73,7 @@ module "vm_opnsense_200" {
 module "vm_openstack_201" {
   source       = "./modules/proxmox_vm"
   target_node  = var.primary_node
-  vmid         = 201
+  vmid = 1201
   name         = "openstack"
   description  = "OpenStack Enterprise Private Cloud Controller & Compute (Nova, Neutron, Keystone, Glance, Horizon Dashboard)"
   cores        = 2
@@ -88,7 +88,7 @@ module "vm_openstack_201" {
 module "vm_metasploitable2_202" {
   source       = "./modules/proxmox_vm"
   target_node  = var.primary_node
-  vmid         = 202
+  vmid = 1202
   name         = "metasploitable2"
   description  = "Metasploitable 2 (Intentionally Vulnerable Linux Target, Penetration Testing & IDS/IPS Tuning)"
   cores        = 1
@@ -102,7 +102,7 @@ module "vm_metasploitable2_202" {
 module "vm_tpot_203" {
   source       = "./modules/proxmox_vm"
   target_node  = var.primary_node
-  vmid         = 203
+  vmid = 1203
   name         = "tpot-honeypot"
   description  = "T-Pot Multi-Honeypot Decoy Platform (Cowrie, Dionaea, Honeytrap, Elastic, Kibana, Suricata)"
   cores        = 4
@@ -117,7 +117,7 @@ module "vm_tpot_203" {
 module "vm_securityonion_204" {
   source       = "./modules/proxmox_vm"
   target_node  = var.primary_node
-  vmid         = 204
+  vmid = 1204
   name         = "securityonion"
   description  = "Security Onion / Wazuh SIEM Platform (Zeek, Suricata, Elastic, Kibana & HIDS Monitoring)"
   cores        = 4
@@ -132,7 +132,7 @@ module "vm_securityonion_204" {
 module "vm_remnux_205" {
   source       = "./modules/proxmox_vm"
   target_node  = var.primary_node
-  vmid         = 205
+  vmid = 1205
   name         = "remnux"
   description  = "REMnux Linux Toolkit (Malware Analysis, Reverse Engineering, Memory Forensics & DFIR)"
   cores        = 2
@@ -164,7 +164,7 @@ module "vm_remnux_205" {
 module "lxc_homeassistant" {
   source       = "./modules/proxmox_lxc"
   target_node  = var.primary_node
-  vmid         = 100
+  vmid = 1100
   hostname     = "homeassistant"
   ostemplate   = var.debian_template
   ostype       = "debian"
@@ -182,7 +182,7 @@ module "lxc_homeassistant" {
 module "lxc_scrutiny" {
   source       = "./modules/proxmox_lxc"
   target_node  = var.primary_node
-  vmid         = 101
+  vmid = 1101
   hostname     = "scrutiny"
   ostemplate   = var.debian_template
   ostype       = "debian"
@@ -200,7 +200,7 @@ module "lxc_scrutiny" {
 module "lxc_ollama" {
   source                 = "./modules/proxmox_lxc"
   target_node            = var.primary_node
-  vmid                   = 102
+  vmid = 1102
   hostname               = "ollama"
   ostemplate             = var.debian_template
   ostype                 = "debian"
@@ -219,7 +219,7 @@ module "lxc_ollama" {
 module "lxc_uptimekuma" {
   source       = "./modules/proxmox_lxc"
   target_node  = var.primary_node
-  vmid         = 103
+  vmid = 1103
   hostname     = "uptimekuma"
   ostemplate   = var.alpine_template
   ostype       = "alpine"
@@ -237,7 +237,7 @@ module "lxc_uptimekuma" {
 module "lxc_monitoring" {
   source       = "./modules/proxmox_lxc"
   target_node  = var.primary_node
-  vmid         = 104
+  vmid = 1104
   hostname     = "monitoring"
   ostemplate   = var.alpine_template
   ostype       = "alpine"
@@ -255,7 +255,7 @@ module "lxc_monitoring" {
 module "lxc_owasp" {
   source       = "./modules/proxmox_lxc"
   target_node  = var.primary_node
-  vmid         = 105
+  vmid = 1105
   hostname     = "owasp"
   ostemplate   = var.alpine_template
   ostype       = "alpine"
@@ -273,7 +273,7 @@ module "lxc_owasp" {
 module "lxc_wazuh" {
   source       = "./modules/proxmox_lxc"
   target_node  = var.primary_node
-  vmid         = 106
+  vmid = 1106
   hostname     = "wazuh"
   ostemplate   = var.debian_template
   ostype       = "ubuntu"
