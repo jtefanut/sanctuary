@@ -11,8 +11,8 @@ module "vlan_10_mgmt" {
   source                  = "./modules/network_segment"
   vlan_id                 = 10
   name                    = "Management & Storage Subnet"
-  cidr                    = "192.168.1.0/24"
-  gateway                 = "192.168.1.1"
+  cidr                    = "10.10.10.0/24"
+  gateway                 = "10.10.10.1"
   default_firewall_policy = "PASS"
 }
 
@@ -20,8 +20,8 @@ module "vlan_20_core" {
   source                  = "./modules/network_segment"
   vlan_id                 = 20
   name                    = "Core Microservices & Ingress"
-  cidr                    = "192.168.20.0/24"
-  gateway                 = "192.168.1.132"
+  cidr                    = "10.10.20.0/24"
+  gateway                 = "10.10.10.132"
   default_firewall_policy = "DROP"
 }
 
@@ -29,8 +29,8 @@ module "vlan_30_cyber" {
   source                  = "./modules/network_segment"
   vlan_id                 = 30
   name                    = "CyberLab & Malware Sandboxes"
-  cidr                    = "192.168.30.0/24"
-  gateway                 = "192.168.1.132"
+  cidr                    = "10.10.30.0/24"
+  gateway                 = "10.10.10.132"
   default_firewall_policy = "DROP"
 }
 
@@ -38,8 +38,8 @@ module "vlan_40_dmz" {
   source                  = "./modules/network_segment"
   vlan_id                 = 40
   name                    = "DMZ Deception & Honeypots"
-  cidr                    = "192.168.40.0/24"
-  gateway                 = "192.168.1.132"
+  cidr                    = "10.10.40.0/24"
+  gateway                 = "10.10.10.132"
   default_firewall_policy = "DROP"
 }
 
@@ -47,8 +47,8 @@ module "vlan_50_iot" {
   source                  = "./modules/network_segment"
   vlan_id                 = 50
   name                    = "IoT & Physical Edge Sensors"
-  cidr                    = "192.168.50.0/24"
-  gateway                 = "192.168.1.132"
+  cidr                    = "10.10.50.0/24"
+  gateway                 = "10.10.10.132"
   default_firewall_policy = "DROP"
 }
 
@@ -152,7 +152,7 @@ module "vm_remnux_205" {
 
 
 
-# Ingress Reverse Proxy runs natively on OPNsense Core (VM 200 - 192.168.1.134)
+# Ingress Reverse Proxy runs natively on OPNsense Core (VM 200 - 10.10.10.134)
 
 
 
@@ -171,7 +171,7 @@ module "lxc_homeassistant" {
   cores        = 2
   memory       = 384
   disk_size    = "16G"
-  ip_address   = "192.168.1.10/24"
+  ip_address   = "10.10.10.10/24"
   gateway      = var.gateway_ip
   nameserver   = var.nameserver_ip
   vlan_tag     = 20
@@ -189,7 +189,7 @@ module "lxc_scrutiny" {
   cores        = 1
   memory       = 128
   disk_size    = "4G"
-  ip_address   = "192.168.1.108/24"
+  ip_address   = "10.10.10.108/24"
   gateway      = var.gateway_ip
   nameserver   = var.nameserver_ip
   vlan_tag     = 20
@@ -207,7 +207,7 @@ module "lxc_ollama" {
   cores                  = 4
   memory                 = 2048
   disk_size              = "16G"
-  ip_address             = "192.168.1.110/24"
+  ip_address             = "10.10.10.110/24"
   gateway                = var.gateway_ip
   nameserver             = var.nameserver_ip
   vlan_tag               = 20
@@ -226,7 +226,7 @@ module "lxc_uptimekuma" {
   cores        = 1
   memory       = 128
   disk_size    = "2G"
-  ip_address   = "192.168.1.119/24"
+  ip_address   = "10.10.10.119/24"
   gateway      = var.gateway_ip
   nameserver   = var.nameserver_ip
   vlan_tag     = 20
@@ -244,7 +244,7 @@ module "lxc_monitoring" {
   cores        = 1
   memory       = 256
   disk_size    = "4G"
-  ip_address   = "192.168.1.121/24"
+  ip_address   = "10.10.10.121/24"
   gateway      = var.gateway_ip
   nameserver   = var.nameserver_ip
   vlan_tag     = 20
@@ -262,7 +262,7 @@ module "lxc_owasp" {
   cores        = 2
   memory       = 512
   disk_size    = "8G"
-  ip_address   = "192.168.1.175/24"
+  ip_address   = "10.10.10.175/24"
   gateway      = var.gateway_ip
   nameserver   = var.nameserver_ip
   vlan_tag     = 20
@@ -280,7 +280,7 @@ module "lxc_wazuh" {
   cores        = 4
   memory       = 6144
   disk_size    = "35G"
-  ip_address   = "192.168.1.240/24"
+  ip_address   = "10.10.10.240/24"
   gateway      = var.gateway_ip
   nameserver   = var.nameserver_ip
   vlan_tag     = 20
