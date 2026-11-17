@@ -8,9 +8,9 @@ To safely reverse-engineer the fraudulent platform without exposing local host a
 
 ### Sandbox Specifications
 
-- **Hypervisor:** Proxmox VE 9.2 (`pve_primary_x64`, `192.168.1.132`).
+- **Hypervisor:** Proxmox VE 9.2 (`proxmox-lab.example`, `192.0.2.132`).
 - **Guest OS:** Kali Linux 2026.1 (64-bit Rolling Release, 2 vCPUs, 4GB RAM).
-- **Network Isolation:** Bound strictly to `vmbr1` (CyberLab isolated bridge) with NAT routing; direct Layer-2 communication to production LAN (`vmbr0`, `192.168.1.0/24`) and Active Directory forest is permanently dropped by OPNsense fir...
+- **Network Isolation:** Bound strictly to `vmbr1` (CyberLab isolated bridge) with NAT routing; direct Layer-2 communication to production LAN (`vmbr0`, `192.0.2.0/24`) and Active Directory forest is permanently dropped by OPNsense fir...
 - **Client Emulation:** Chromium browser running inside a temporary sandboxed profile (`--incognito --disable-sync --user-data-dir=/tmp/burp_profile`).
 - **Egress Routing:** Multi-hop WireGuard VPN tunnel terminating in Western Europe to mask analyst residential ISP IP space.
 
