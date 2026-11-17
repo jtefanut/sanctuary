@@ -7,20 +7,8 @@ terraform {
       version = ">= 0.60.0"
     }
   }
-
-  backend "s3" {
-    bucket                      = "terraform-state"
-    key                         = "infrastructure/terraform.tfstate"
-    region                      = "us-east-1"
-    endpoint                    = "http://10.10.10.161:9000" # MinIO CT 161 / PBS S3 API
-    dynamodb_endpoint           = "http://10.10.10.161:9000" # DynamoDB-compatible state lock table
-    dynamodb_table              = "terraform-locks"
-    encrypt                     = true
-    skip_credentials_validation = true
-    skip_metadata_api_check     = true
-    skip_region_validation      = true
-    use_path_style              = true
-  }
+  # No remote backend is configured in this public example.
+  # Terraform will use its local state unless you configure a backend privately.
 }
 
 provider "proxmox" {
