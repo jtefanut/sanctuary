@@ -30,7 +30,7 @@ variable "gateway_ip" {
 variable "nameserver_ip" {
   type        = string
   description = "Default DNS nameserver IP"
-  default     = "192.168.1.1"
+  default     = "10.10.10.1"
 }
 
 variable "debian_template" {
