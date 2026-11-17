@@ -45,7 +45,7 @@ Additional forensic intelligence captured the exact deceptive ad creative deploy
 
 1. **Compromised Card Lockdown:** The victim immediately froze and blocked the compromised card via George BCR, requesting an emergency card cancellation and reissuance to eliminate recurring unauthorized charges.
 2. **Chargeback Dispute:** A formal dispute was initiated with BCR support under Visa/Mastercard Rule 4853 / Condition 13.1 (Merchant Fraud / Misrepresentation), requesting a complete clawback of the ~21 EUR fee.
-3. **Perimeter Hardening on OPNsense (`192.168.1.1`):**
+3. **Perimeter Hardening on OPNsense (`192.0.2.1`):**
    - Ingested `domains.txt` into Unbound DNS Blocklists.
    - Deployed custom Suricata IDS rules (`sid:1000951-1000956`) on WAN and LAN interfaces.
 - Additional items omitted.
