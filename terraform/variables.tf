@@ -44,3 +44,9 @@ variable "alpine_template" {
   description = "Alpine 3.24 x86_64 OS template"
   default     = "local:vztmpl/alpine-3.24-default_20260714_amd64.tar.xz"
 }
+
+variable "ssh_public_keys" {
+  type        = list(string)
+  description = "Public SSH keys injected into LXC root accounts; set via private tfvars or TF_VAR_ssh_public_keys."
+  default     = []
+}
