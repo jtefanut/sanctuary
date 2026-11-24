@@ -49,7 +49,7 @@ module "vlan_50_iot" {
   default_firewall_policy = "DROP"
 }
 
-# VMID allocation: 900-905. Network tags match the declared VLANs.
+# VMID allocation: 900-905. Except OPNsense, these VM modules create blank disks\n# until an OS ISO or imported disk image is supplied.
 module "vm_opnsense_900" {
   source = "./modules/proxmox_vm"
   target_node = var.primary_node
@@ -145,7 +145,7 @@ module "vm_remnux_905" {
   tags = ["cyber", "dfir", "malware-analysis", "terraform"]
 }
 
-# LXC VMIDs 906-914. These addresses are all on VLAN 10 by design.
+# LXC VMIDs 906-914. Shared services use VLAN 10; HA and IoT use VLAN 50.
 module "lxc_homeassistant" {
   source = "./modules/proxmox_lxc"
   target_node = var.primary_node
