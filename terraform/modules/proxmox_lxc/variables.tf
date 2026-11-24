@@ -1,35 +1,30 @@
 variable "target_node" {
-  type        = string
-  description = "Target Proxmox node"
-  default     = "pve"
+  type    = string
+  default = "pve"
   validation {
     condition     = length(var.target_node) > 0
     error_message = "target_node must not be empty."
   }
 }
 variable "vmid" {
-  type        = number
-  description = "Unique Proxmox guest ID"
+  type = number
   validation {
     condition     = var.vmid >= 100 && var.vmid <= 999
     error_message = "vmid must be between 100 and 999."
   }
 }
 variable "hostname" {
-  type        = string
-  description = "Container hostname"
+  type = string
   validation {
     condition     = can(regex("^[a-z0-9-]+$", var.hostname))
     error_message = "hostname must contain lowercase letters, numbers and hyphens only."
   }
 }
 variable "ostemplate" {
-  type        = string
-  description = "Proxmox storage ID of the LXC template"
+  type = string
 }
 variable "ostype" {
-  type        = string
-  description = "Guest OS family"
+  type = string
   validation {
     condition     = contains(["debian", "alpine", "ubuntu"], var.ostype)
     error_message = "Supported OS types: debian, alpine, ubuntu."
@@ -68,8 +63,7 @@ variable "storage_pool" {
   default = "local-lvm"
 }
 variable "ip_address" {
-  type        = string
-  description = "Static IPv4 address in CIDR notation"
+  type = string
   validation {
     condition     = can(regex("^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)/[0-9]{1,2}$", var.ip_address))
     error_message = "ip_address must be a valid IPv4 CIDR."
@@ -103,12 +97,17 @@ variable "nesting" {
   type    = bool
   default = true
 }
+variable "onboot" {
+  type        = bool
+  description = "Start this container automatically when the Proxmox node boots."
+  default     = true
+}
 variable "tags" {
   type    = list(string)
   default = ["terraform", "homelab"]
 }
 variable "ssh_public_keys" {
   type        = list(string)
-  description = "Authorized SSH public keys; configure real keys through a private tfvars file."
+  description = "Authorized SSH public keys; set real keys through private configuration."
   default     = []
 }
