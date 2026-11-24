@@ -42,8 +42,7 @@ variable "ipsets" {
       "10.50.0.0/24"
     ]
     "telemetry-collectors" = [
-      "10.10.10.20",
-      "10.10.10.22"
+      "10.10.10.14"
     ]
     "bogon-networks" = [
       "0.0.0.0/8",
