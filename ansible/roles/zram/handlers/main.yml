@@ -1,5 +1,0 @@
----
-- name: Restart zramswap
-  systemd:
-    name: zramswap
-    state: restarted
