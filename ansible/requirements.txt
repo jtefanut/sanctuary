@@ -1,0 +1,2 @@
+# Required only when managing Windows hosts through WinRM.
+pywinrm>=0.4.3
