@@ -107,6 +107,11 @@ variable "onboot" {
   description = "Start this container automatically when the Proxmox node boots."
   default     = true
 }
+variable "device_passthrough" {
+  type        = list(string)
+  description = "Host device paths to pass through, e.g. /dev/net/tun or NVIDIA device nodes."
+  default     = []
+}
 variable "tags" {
   type    = list(string)
   default = ["terraform", "homelab"]
