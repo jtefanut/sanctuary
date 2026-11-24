@@ -1,13 +1,11 @@
-
-# Timezone & Localization
+---
+# Shared host baseline. Secrets belong in an Ansible Vault file, never in Git.
 system_timezone: "Europe/Bucharest"
 system_locale: "en_US.UTF-8"
-
-# Network & DNS Baseline
 domain_name: "example.invalid"
+
 nameservers:
   - 10.10.10.1
-  - 10.10.10.4
   - 1.1.1.1
 
 ntp_servers:
@@ -16,15 +14,17 @@ ntp_servers:
   - 1.ro.pool.ntp.org
   - time.cloudflare.com
 
-# Standard Administrator User & Public Keys
 admin_user: "admin"
 admin_groups:
   - sudo
   - wheel
+admin_authorized_keys: []
 
-admin_authorized_keys: [] # Add your own public SSH key locally; do not publish personal keys.
+services_base_path: "/opt/homelab"
+docker_compose_version: "v2"
+docker_network_name: "homelab.example"
+default_timezone: "Europe/Bucharest"
 
-# Common Baseline Packages for Debian/Ubuntu/Alpine
 common_packages_debian:
   - curl
   - wget
@@ -58,12 +58,10 @@ common_packages_alpine:
   - busybox-extras
   - rsync
 
-# Observability Configuration
 node_exporter_version: "1.8.2"
 node_exporter_port: 9100
 enable_node_exporter: true
 
-# Security & SSH Defaults
 ssh_port: 22
 ssh_permit_root_login: "prohibit-password"
 ssh_password_authentication: "no"
