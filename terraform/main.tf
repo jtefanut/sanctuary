@@ -2,7 +2,7 @@
 # Run Terraform from this directory: terraform init && terraform validate.
 # VLAN/network modules describe the intended topology; they do not configure
 # switch trunks, OPNsense interfaces, DHCP, routing or Proxmox SDN resources.
-# Service LXCs are currently attached to the management subnet (VLAN 10).
+# Shared infrastructure LXCs use VLAN 10; Home Assistant and IoT endpoints use VLAN 50.
 
 module "vlan_10_mgmt" {
   source = "./modules/network_segment"
@@ -156,11 +156,11 @@ module "lxc_homeassistant" {
   cores = 2
   memory = 1024
   disk_size = "16G"
-  ip_address = "10.10.10.10/24"
-  gateway = var.gateway_ip
+  ip_address = "10.10.50.10/24"
+  gateway = var.iot_gateway_ip
   nameserver = var.nameserver_ip
   ssh_public_keys = var.ssh_public_keys
-  vlan_tag = 10
+  vlan_tag = 50
   unprivileged = false
   tags = ["automation", "iot", "home-assistant", "terraform"]
 }
@@ -288,11 +288,11 @@ module "lxc_mosquitto" {
   cores = 1
   memory = 256
   disk_size = "3G"
-  ip_address = "10.10.10.17/24"
-  gateway = var.gateway_ip
+  ip_address = "10.10.50.17/24"
+  gateway = var.iot_gateway_ip
   nameserver = var.nameserver_ip
   ssh_public_keys = var.ssh_public_keys
-  vlan_tag = 10
+  vlan_tag = 50
   onboot = false
   tags = ["iot", "mqtt", "terraform"]
 }
@@ -307,11 +307,11 @@ module "lxc_esphome" {
   cores = 2
   memory = 1536
   disk_size = "30G"
-  ip_address = "10.10.10.18/24"
-  gateway = var.gateway_ip
+  ip_address = "10.10.50.18/24"
+  gateway = var.iot_gateway_ip
   nameserver = var.nameserver_ip
   ssh_public_keys = var.ssh_public_keys
-  vlan_tag = 10
+  vlan_tag = 50
   unprivileged = false
   onboot = false
   device_passthrough = ["/dev/net/tun"]
