@@ -30,7 +30,7 @@ module "vm_ad2016" {
   disk_size = 50
   storage_pool = "local-lvm"
   onboot = false
-  tags = ["active-directory", "domain-controller", "server2016", "terraform", "windows"]
+  tags = ["active-directory", "member-server", "server2016", "terraform", "windows"]
 }
 
 module "vm_adwin10" {
