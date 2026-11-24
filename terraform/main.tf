@@ -1,8 +1,3 @@
-# Homelab infrastructure - single active Terraform root.
-# Run Terraform from this directory: terraform init && terraform validate.
-# VLAN/network modules describe the intended topology; they do not configure
-# switch trunks, OPNsense interfaces, DHCP, routing or Proxmox SDN resources.
-# Shared infrastructure LXCs use VLAN 10; Home Assistant and IoT endpoints use VLAN 50.
 
 module "vlan_10_mgmt" {
   source = "./modules/network_segment"
@@ -49,8 +44,6 @@ module "vlan_50_iot" {
   default_firewall_policy = "DROP"
 }
 
-# Active VMID allocation: OPNsense 900 and Windows malware-analysis VM 931.
-# Existing Windows guests retain their Terraform module addresses for state continuity.
 module "vm_opnsense_200" {
   source = "./modules/proxmox_vm"
   target_node = var.primary_node
@@ -72,7 +65,6 @@ module "vm_opnsense_200" {
   tags = ["firewall", "security", "opnsense", "suricata", "terraform"]
 }
 
-# Active LXC guests only: Home Assistant, Monitoring, Wazuh, Mosquitto and ESPHome.
 module "vm_malware_analysis" {
   source = "./modules/proxmox_vm"
   target_node = var.primary_node
@@ -195,8 +187,6 @@ module "lxc_esphome" {
   tags = ["iot", "esphome", "terraform"]
 }
 
-# These modules currently expose design metadata only; they do not create
-# SDN zones, firewall rules or tunnels on the Proxmox/OPNsense appliances.
 module "proxmox_sdn" {
   source = "./modules/proxmox_sdn"
 }
