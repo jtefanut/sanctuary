@@ -1,7 +1,6 @@
 # These guests are no longer part of the active homelab inventory.
 # Forget any stale Terraform state entries without issuing Proxmox deletions.
-# This is intentional because the retired guests have already been removed
-# outside Terraform; verify the state before planning.
+# This keeps state cleanup non-destructive even if stale entries remain.
 
 removed {
   from = module.vm_openstack_201
