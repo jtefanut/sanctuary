@@ -49,7 +49,8 @@ module "vlan_50_iot" {
   default_firewall_policy = "DROP"
 }
 
-# VMID allocation: 900-905. Except OPNsense, these VM modules create blank disks\n# until an OS ISO or imported disk image is supplied.
+# VMID allocation: 900-905. Except OPNsense, these VM modules create blank disks
+# until an OS ISO or imported disk image is supplied.
 module "vm_opnsense_200" {
   source = "./modules/proxmox_vm"
   target_node = var.primary_node
