@@ -4,7 +4,7 @@ terraform {
   required_providers {
     proxmox = {
       source  = "bpg/proxmox"
-      version = ">= 0.60.0"
+      version = ">= 0.83.2"
     }
   }
   # No remote backend is configured in this public example.
