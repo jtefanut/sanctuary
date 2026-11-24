@@ -1,24 +1,13 @@
 ---
-- name: Deploy Homelab Services
+- name: Deploy Services
   hosts: all
   become: true
   vars:
     base_path: /opt/homelab
     homelab_services:
-      - actualbudget
-      - alist
-      - changedetection.io
-      - crowdsec
-      - filebrowser
       - grafana
       - homeassistant
-      - nginx
-      - pi-hole
       - prometheus
-      - scrutiny
-      - trillium-notes
-      - uptime-kuma
-      - vaultwarden
 
   tasks:
     - name: Create service directories
