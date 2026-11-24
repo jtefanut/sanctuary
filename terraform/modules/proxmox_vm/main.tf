@@ -8,6 +8,17 @@ terraform {
   }
 }
 
+locals {
+  effective_network_devices = var.network_devices == null ? [
+    {
+      bridge      = var.bridge
+      vlan_id     = var.vlan_tag
+      firewall    = true
+      mac_address = var.mac_address
+    }
+  ] : var.network_devices
+}
+
 resource "proxmox_virtual_environment_vm" "vm" {
   node_name   = var.target_node
   vm_id       = var.vmid
@@ -17,7 +28,7 @@ resource "proxmox_virtual_environment_vm" "vm" {
   on_boot     = var.onboot
   started     = true
 
-  # Guest agent is opt-in: it must be installed and enabled inside the guest.
+  # Enable only after QEMU guest agent is installed inside the guest.
   agent {
     enabled = var.agent_enabled
   }
@@ -32,6 +43,8 @@ resource "proxmox_virtual_environment_vm" "vm" {
     dedicated = var.memory
     floating  = var.balloon > 0 ? var.balloon : var.memory
   }
+
+  scsi_hardware = "virtio-scsi-single"
 
   disk {
     datastore_id = var.storage_pool
@@ -50,12 +63,15 @@ resource "proxmox_virtual_environment_vm" "vm" {
     }
   }
 
-  network_device {
-    bridge      = var.bridge
-    vlan_id     = var.vlan_tag
-    model       = "virtio"
-    mac_address = var.mac_address != "" ? var.mac_address : null
-    firewall    = true
+  dynamic "network_device" {
+    for_each = local.effective_network_devices
+    content {
+      bridge      = network_device.value.bridge
+      vlan_id     = try(network_device.value.vlan_id, null)
+      model       = "virtio"
+      mac_address = try(network_device.value.mac_address, "") != "" ? network_device.value.mac_address : null
+      firewall    = try(network_device.value.firewall, true)
+    }
   }
 
   operating_system {
