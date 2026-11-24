@@ -66,6 +66,46 @@
         group: root
         mode: "0644"
 
+    - name: Prepare Grafana persistent data directory
+      ansible.builtin.file:
+        path: "{{ service_dir }}/grafana-data"
+        state: directory
+        owner: "472"
+        group: "472"
+        mode: "0750"
+
+    - name: Prepare Prometheus persistent data directory
+      ansible.builtin.file:
+        path: "{{ service_dir }}/prometheus-data"
+        state: directory
+        owner: "65534"
+        group: "65534"
+        mode: "0750"
+
+    - name: Prepare Loki persistent data directory
+      ansible.builtin.file:
+        path: "{{ service_dir }}/loki-data"
+        state: directory
+        owner: "10001"
+        group: "10001"
+        mode: "0750"
+
+    - name: Prepare Alloy persistent data directory
+      ansible.builtin.file:
+        path: "{{ service_dir }}/alloy-data"
+        state: directory
+        owner: root
+        group: root
+        mode: "0750"
+
+    - name: Copy Grafana datasource provisioning
+      ansible.builtin.copy:
+        src: ../services/x64/monitoring/grafana-datasources.yaml
+        dest: "{{ service_dir }}/grafana-datasources.yaml"
+        owner: root
+        group: root
+        mode: "0644"
+
     - name: Copy Prometheus configuration
       ansible.builtin.copy:
         src: ../services/x64/monitoring/prometheus.yml
@@ -82,10 +122,10 @@
         group: root
         mode: "0644"
 
-    - name: Install Promtail configuration
+    - name: Install Grafana Alloy configuration
       ansible.builtin.copy:
-        src: ../services/x64/monitoring/promtail-config.yaml
-        dest: "{{ service_dir }}/promtail-config.yaml"
+        src: ../services/x64/monitoring/alloy-config.alloy
+        dest: "{{ service_dir }}/alloy-config.alloy"
         owner: root
         group: root
         mode: "0644"
