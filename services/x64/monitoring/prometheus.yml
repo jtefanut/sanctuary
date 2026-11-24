@@ -1,42 +1,47 @@
-# Prometheus Global Cluster Scrape Configuration
+# Targets managed outside this repository remain explicit integration points.
 global:
-  scrape_interval: 10s
-  evaluation_interval: 10s
+  scrape_interval: 15s
+  evaluation_interval: 15s
   external_labels:
-    cluster: 'homelab-enterprise'
+    cluster: homelab-enterprise
 
 scrape_configs:
-  - job_name: 'prometheus'
+  - job_name: prometheus
     static_configs:
-      - targets: ['localhost:9090']
+      - targets: ["localhost:9090"]
 
-  - job_name: 'node1-pve-x64'
+  - job_name: monitoring-node-exporter
     static_configs:
-      - targets: ['10.10.10.22:9100']
+      - targets: ["node-exporter:9100"]
         labels:
-          node: 'pve-primary'
-          arch: 'x86_64'
+          node: monitoring
 
-
-  - job_name: 'opnsense-firewall'
+  - job_name: loki
     static_configs:
-      - targets: ['10.10.10.21:9273']
+      - targets: ["loki:3100"]
+
+  - job_name: node1-pve-x64
+    static_configs:
+      - targets: ["10.10.10.22:9100"]
         labels:
-          node: 'opnsense-gw'
-          role: 'perimeter-firewall'
+          node: pve-primary
+          arch: x86_64
 
-  - job_name: 'omv-nas'
+  - job_name: opnsense-firewall
     static_configs:
-      - targets: ['10.10.10.23:9100']
+      - targets: ["10.10.10.21:9273"]
         labels:
-          node: 'omv-storage'
+          node: opnsense-exporter
+          role: perimeter-firewall
 
-  - job_name: 'kubernetes-worker'
+  - job_name: omv-nas
     static_configs:
-      - targets: ['10.10.10.20:9100']
+      - targets: ["10.10.10.23:9100"]
         labels:
-          node: 'kubernetes-node'
+          node: omv-storage
 
-  - job_name: 'loki'
+  - job_name: kubernetes-worker
     static_configs:
-      - targets: ['localhost:3100']
+      - targets: ["10.10.10.20:9100"]
+        labels:
+          node: kubernetes-node
