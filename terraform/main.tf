@@ -49,8 +49,8 @@ module "vlan_50_iot" {
   default_firewall_policy = "DROP"
 }
 
-# VMID allocation: 900-905. Except OPNsense, these VM modules create blank disks
-# until an OS ISO or imported disk image is supplied.
+# Active VMID allocation: OPNsense 900 and Windows malware-analysis VM 931.
+# Existing Windows guests retain their Terraform module addresses for state continuity.
 module "vm_opnsense_200" {
   source = "./modules/proxmox_vm"
   target_node = var.primary_node
@@ -72,81 +72,33 @@ module "vm_opnsense_200" {
   tags = ["firewall", "security", "opnsense", "suricata", "terraform"]
 }
 
-module "vm_openstack_201" {
+
+
+
+
+
+
+
+
+
+
+# Active LXC guests only: Home Assistant, Monitoring, Wazuh, Mosquitto and ESPHome.
+module "vm_malware_analysis" {
   source = "./modules/proxmox_vm"
   target_node = var.primary_node
-  vmid = 901
-  name = "openstack"
-  description = "OpenStack private cloud controller and compute"
+  vmid = 931
+  name = "malware-analysis"
+  description = "Windows 10 malware analysis workstation"
+  os_type = "win10"
   cores = 2
-  memory = 4096
-  balloon = 2048
-  disk_size = 32
-  storage_pool = "local-lvm"
-  vlan_tag = 20
-  tags = ["openstack", "cloud", "iaas", "terraform"]
-}
-
-module "vm_metasploitable2_202" {
-  source = "./modules/proxmox_vm"
-  target_node = var.primary_node
-  vmid = 902
-  name = "metasploitable2"
-  description = "Intentionally vulnerable penetration-testing target"
-  cores = 1
-  memory = 512
-  disk_size = 8
-  storage_pool = "local-lvm"
-  vlan_tag = 30
-  tags = ["cyber", "metasploit", "penetration-testing", "terraform"]
-}
-
-module "vm_tpot_203" {
-  source = "./modules/proxmox_vm"
-  target_node = var.primary_node
-  vmid = 903
-  name = "tpot-honeypot"
-  description = "T-Pot multi-honeypot platform"
-  cores = 4
-  memory = 8192
-  balloon = 4096
-  disk_size = 60
-  storage_pool = "local-lvm"
-  vlan_tag = 40
-  tags = ["cyber", "honeypot", "tpot", "terraform"]
-}
-
-module "vm_securityonion_204" {
-  source = "./modules/proxmox_vm"
-  target_node = var.primary_node
-  vmid = 904
-  name = "securityonion"
-  description = "Security Onion network security monitoring platform"
-  cores = 4
-  memory = 8192
-  balloon = 4096
+  memory = 2560
+  balloon = 0
   disk_size = 50
   storage_pool = "local-lvm"
-  vlan_tag = 30
-  tags = ["blue-team", "security-onion", "siem", "terraform"]
+  bridge = "vmbr0"
+  tags = ["windows", "windows10", "malware-analysis", "sandbox", "terraform"]
 }
 
-module "vm_remnux_205" {
-  source = "./modules/proxmox_vm"
-  target_node = var.primary_node
-  vmid = 905
-  name = "remnux"
-  description = "REMnux malware analysis and DFIR workstation"
-  cores = 2
-  memory = 4096
-  balloon = 2048
-  disk_size = 40
-  storage_pool = "local-lvm"
-  vlan_tag = 30
-  tags = ["cyber", "dfir", "malware-analysis", "terraform"]
-}
-
-# LXC VMIDs 906-914 (908 intentionally unused). Shared services use VLAN 10; HA and IoT use VLAN 50.
 module "lxc_homeassistant" {
   source = "./modules/proxmox_lxc"
   target_node = var.primary_node
@@ -167,43 +119,11 @@ module "lxc_homeassistant" {
   tags = ["automation", "iot", "home-assistant", "terraform"]
 }
 
-module "lxc_scrutiny" {
-  source = "./modules/proxmox_lxc"
-  target_node = var.primary_node
-  vmid = 907
-  hostname = "scrutiny"
-  ostemplate = var.debian_template
-  ostype = "debian"
-  cores = 1
-  memory = 128
-  disk_size = "4G"
-  ip_address = "10.10.10.11/24"
-  gateway = var.gateway_ip
-  nameserver = var.nameserver_ip
-  ssh_public_keys = var.ssh_public_keys
-  vlan_tag = 10
-  tags = ["monitoring", "smart", "storage", "terraform"]
-}
 
 
 
-module "lxc_uptimekuma" {
-  source = "./modules/proxmox_lxc"
-  target_node = var.primary_node
-  vmid = 909
-  hostname = "uptimekuma"
-  ostemplate = var.alpine_template
-  ostype = "alpine"
-  cores = 1
-  memory = 128
-  disk_size = "2G"
-  ip_address = "10.10.10.13/24"
-  gateway = var.gateway_ip
-  nameserver = var.nameserver_ip
-  ssh_public_keys = var.ssh_public_keys
-  vlan_tag = 10
-  tags = ["monitoring", "uptime", "terraform"]
-}
+
+
 
 module "lxc_monitoring" {
   source = "./modules/proxmox_lxc"
@@ -226,23 +146,7 @@ module "lxc_monitoring" {
   tags = ["monitoring", "prometheus", "grafana", "terraform"]
 }
 
-module "lxc_owasp" {
-  source = "./modules/proxmox_lxc"
-  target_node = var.primary_node
-  vmid = 911
-  hostname = "owasp"
-  ostemplate = var.alpine_template
-  ostype = "alpine"
-  cores = 2
-  memory = 512
-  disk_size = "8G"
-  ip_address = "10.10.10.15/24"
-  gateway = var.gateway_ip
-  nameserver = var.nameserver_ip
-  ssh_public_keys = var.ssh_public_keys
-  vlan_tag = 10
-  tags = ["cyber", "owasp", "pentest", "terraform"]
-}
+
 
 module "lxc_wazuh" {
   source = "./modules/proxmox_lxc"
