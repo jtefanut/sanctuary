@@ -56,3 +56,9 @@ variable "nvidia_device_paths" {
   description = "Existing NVIDIA device nodes on the Proxmox host to pass into Ollama LXC."
   default     = []
 }
+
+variable "iot_gateway_ip" {
+  type        = string
+  description = "Default gateway for the dedicated IoT VLAN 50."
+  default     = "10.10.50.1"
+}
