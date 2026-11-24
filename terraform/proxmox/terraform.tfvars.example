@@ -1,7 +1,0 @@
-# Proxmox VE Cluster API Configuration
-proxmox_endpoint  = "https://proxmox.example.invalid:8006/"
-proxmox_api_token = "REPLACE_WITH_PROXMOX_API_TOKEN"
-proxmox_insecure  = false
-
-primary_node   = "proxmox"
-secondary_node = "proxmox2"
