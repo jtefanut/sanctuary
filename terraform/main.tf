@@ -1,297 +1,303 @@
-# ==============================================================================
-# HOMELAB INFRASTRUCTURE AS CODE — MASTER DECLARATION
-# Provider: bpg/proxmox (Proxmox VE REST API)
-# Hardware: generic x86_64 virtualization host
-# ==============================================================================
+# Homelab infrastructure - single active Terraform root.
+# Run Terraform from this directory: terraform init && terraform validate.
+# All service LXCs use the management subnet until dedicated routed VLAN
+# interfaces are configured on OPNsense and the Proxmox bridge.
 
-# ------------------------------------------------------------------------------
-# 1. NETWORK SEGMENT ABSTRACTIONS (VLAN DEFINITIONS)
-# ------------------------------------------------------------------------------
 module "vlan_10_mgmt" {
-  source                  = "./modules/network_segment"
-  vlan_id                 = 10
-  name                    = "Management & Storage Subnet"
-  cidr                    = "10.10.10.0/24"
-  gateway                 = "10.10.10.1"
+  source = "./modules/network_segment"
+  vlan_id = 10
+  name = "Management and shared services"
+  cidr = "10.10.10.0/24"
+  gateway = "10.10.10.1"
   default_firewall_policy = "PASS"
 }
 
 module "vlan_20_core" {
-  source                  = "./modules/network_segment"
-  vlan_id                 = 20
-  name                    = "Core Microservices & Ingress"
-  cidr                    = "10.10.20.0/24"
-  gateway                 = "10.10.10.1"
+  source = "./modules/network_segment"
+  vlan_id = 20
+  name = "Core workloads"
+  cidr = "10.10.20.0/24"
+  gateway = "10.10.20.1"
   default_firewall_policy = "DROP"
 }
 
 module "vlan_30_cyber" {
-  source                  = "./modules/network_segment"
-  vlan_id                 = 30
-  name                    = "CyberLab & Malware Sandboxes"
-  cidr                    = "10.10.30.0/24"
-  gateway                 = "10.10.10.1"
+  source = "./modules/network_segment"
+  vlan_id = 30
+  name = "Cyber range and malware analysis"
+  cidr = "10.10.30.0/24"
+  gateway = "10.10.30.1"
   default_firewall_policy = "DROP"
 }
 
 module "vlan_40_dmz" {
-  source                  = "./modules/network_segment"
-  vlan_id                 = 40
-  name                    = "DMZ Deception & Honeypots"
-  cidr                    = "10.10.40.0/24"
-  gateway                 = "10.10.10.1"
+  source = "./modules/network_segment"
+  vlan_id = 40
+  name = "DMZ and honeypots"
+  cidr = "10.10.40.0/24"
+  gateway = "10.10.40.1"
   default_firewall_policy = "DROP"
 }
 
 module "vlan_50_iot" {
-  source                  = "./modules/network_segment"
-  vlan_id                 = 50
-  name                    = "IoT & Physical Edge Sensors"
-  cidr                    = "10.10.50.0/24"
-  gateway                 = "10.10.10.1"
+  source = "./modules/network_segment"
+  vlan_id = 50
+  name = "IoT and edge devices"
+  cidr = "10.10.50.0/24"
+  gateway = "10.10.50.1"
   default_firewall_policy = "DROP"
 }
 
-# ------------------------------------------------------------------------------
-# 2. QEMU / KVM ENTERPRISE VIRTUAL MACHINES (DYNAMIC VIRTIO BALLOONING)
-# ------------------------------------------------------------------------------
-module "vm_opnsense_200" {
-  source       = "./modules/proxmox_vm"
-  target_node  = var.primary_node
+# VMID allocation: 900-905. Network tags match the declared VLANs.
+module "vm_opnsense_900" {
+  source = "./modules/proxmox_vm"
+  target_node = var.primary_node
   vmid = 900
-  name         = "opnsense"
-  description  = "OPNsense Perimeter Stateful Firewall, Suricata IDS/IPS & WireGuard Kernel Rotator"
-  cores        = 2
-  memory       = 2048
-  balloon      = 1024
-  disk_size    = 16
+  name = "opnsense"
+  description = "OPNsense firewall and Suricata IDS/IPS"
+  cores = 2
+  memory = 2048
+  balloon = 1024
+  disk_size = 16
   storage_pool = "local-lvm"
-  vlan_tag     = 10
-  tags         = ["firewall", "security", "opnsense", "suricata", "wireguard", "terraform"]
+  vlan_tag = 10
+  tags = ["firewall", "security", "opnsense", "suricata", "terraform"]
 }
 
-module "vm_openstack_201" {
-  source       = "./modules/proxmox_vm"
-  target_node  = var.primary_node
+module "vm_openstack_901" {
+  source = "./modules/proxmox_vm"
+  target_node = var.primary_node
   vmid = 901
-  name         = "openstack"
-  description  = "OpenStack Enterprise Private Cloud Controller & Compute (Nova, Neutron, Keystone, Glance, Horizon Dashboard)"
-  cores        = 2
-  memory       = 4096
-  balloon      = 2048
-  disk_size    = 32
+  name = "openstack"
+  description = "OpenStack private cloud controller and compute"
+  cores = 2
+  memory = 4096
+  balloon = 2048
+  disk_size = 32
   storage_pool = "local-lvm"
-  vlan_tag     = 20
-  tags         = ["openstack", "cloud", "iaas", "nova", "neutron", "horizon", "terraform"]
+  vlan_tag = 20
+  tags = ["openstack", "cloud", "iaas", "terraform"]
 }
 
-module "vm_metasploitable2_202" {
-  source       = "./modules/proxmox_vm"
-  target_node  = var.primary_node
+module "vm_metasploitable2_902" {
+  source = "./modules/proxmox_vm"
+  target_node = var.primary_node
   vmid = 902
-  name         = "metasploitable2"
-  description  = "Metasploitable 2 (Intentionally Vulnerable Linux Target, Penetration Testing & IDS/IPS Tuning)"
-  cores        = 1
-  memory       = 512
-  disk_size    = 8
+  name = "metasploitable2"
+  description = "Intentionally vulnerable penetration-testing target"
+  cores = 1
+  memory = 512
+  disk_size = 8
   storage_pool = "local-lvm"
-  vlan_tag     = 20
-  tags         = ["cyber", "metasploit", "metasploitable2", "penetration-testing", "red-team", "terraform"]
+  vlan_tag = 30
+  tags = ["cyber", "metasploit", "penetration-testing", "terraform"]
 }
 
-module "vm_tpot_203" {
-  source       = "./modules/proxmox_vm"
-  target_node  = var.primary_node
+module "vm_tpot_903" {
+  source = "./modules/proxmox_vm"
+  target_node = var.primary_node
   vmid = 903
-  name         = "tpot-honeypot"
-  description  = "T-Pot Multi-Honeypot Decoy Platform (Cowrie, Dionaea, Honeytrap, Elastic, Kibana, Suricata)"
-  cores        = 4
-  memory       = 8192
-  balloon      = 4096
-  disk_size    = 60
+  name = "tpot-honeypot"
+  description = "T-Pot multi-honeypot platform"
+  cores = 4
+  memory = 8192
+  balloon = 4096
+  disk_size = 60
   storage_pool = "local-lvm"
-  vlan_tag     = 20
-  tags         = ["cyber", "honeypot", "tpot", "threat-intel", "elastic", "suricata", "terraform"]
+  vlan_tag = 40
+  tags = ["cyber", "honeypot", "tpot", "terraform"]
 }
 
-module "vm_securityonion_204" {
-  source       = "./modules/proxmox_vm"
-  target_node  = var.primary_node
+module "vm_securityonion_904" {
+  source = "./modules/proxmox_vm"
+  target_node = var.primary_node
   vmid = 904
-  name         = "securityonion"
-  description  = "Security Onion / Wazuh SIEM Platform (Zeek, Suricata, Elastic, Kibana & HIDS Monitoring)"
-  cores        = 4
-  memory       = 8192
-  balloon      = 4096
-  disk_size    = 50
+  name = "securityonion"
+  description = "Security Onion network security monitoring platform"
+  cores = 4
+  memory = 8192
+  balloon = 4096
+  disk_size = 50
   storage_pool = "local-lvm"
-  vlan_tag     = 30
-  tags         = ["blue-team", "hids", "log-analysis", "security-onion", "siem", "wazuh", "terraform"]
+  vlan_tag = 30
+  tags = ["blue-team", "security-onion", "siem", "terraform"]
 }
 
-module "vm_remnux_205" {
-  source       = "./modules/proxmox_vm"
-  target_node  = var.primary_node
+module "vm_remnux_905" {
+  source = "./modules/proxmox_vm"
+  target_node = var.primary_node
   vmid = 905
-  name         = "remnux"
-  description  = "REMnux Linux Toolkit (Malware Analysis, Reverse Engineering, Memory Forensics & DFIR)"
-  cores        = 2
-  memory       = 4096
-  balloon      = 2048
-  disk_size    = 40
+  name = "remnux"
+  description = "REMnux malware analysis and DFIR workstation"
+  cores = 2
+  memory = 4096
+  balloon = 2048
+  disk_size = 40
   storage_pool = "local-lvm"
-  vlan_tag     = 35
-  tags         = ["cyber", "dfir", "malware-analysis", "remnux", "reverse-engineering", "terraform"]
+  vlan_tag = 30
+  tags = ["cyber", "dfir", "malware-analysis", "terraform"]
 }
 
-# ------------------------------------------------------------------------------
-# BACHELOR THESIS / FACULTY LABS (VM 300, 301, 302 & CT 303)
-# Dedicated declarative configuration moved to terraform/licenta.tf
-# ------------------------------------------------------------------------------
-
-
-
-
-# Ingress Reverse Proxy runs natively on OPNsense Core (VM 200 - 10.10.10.2)
-
-
-
-# ------------------------------------------------------------------------------
-# 3. PROXMOX CORE LXC CONTAINERS (NODE 1 — Intel Core i3-10100F)
-# Example Containers: 900 to 912
-# ------------------------------------------------------------------------------
-
+# LXC VMIDs 906-914. These addresses are all on VLAN 10 by design.
 module "lxc_homeassistant" {
-  source       = "./modules/proxmox_lxc"
-  target_node  = var.primary_node
+  source = "./modules/proxmox_lxc"
+  target_node = var.primary_node
   vmid = 906
-  hostname     = "homeassistant"
-  ostemplate   = var.debian_template
-  ostype       = "debian"
-  cores        = 2
-  memory       = 384
-  disk_size    = "16G"
-  ip_address   = "10.10.10.10/24"
-  gateway      = var.gateway_ip
-  nameserver   = var.nameserver_ip
-  vlan_tag     = 20
-  unprivileged = true
-  tags         = ["automation", "iot", "smart-home", "zigbee", "terraform", "example-node"]
+  hostname = "homeassistant"
+  ostemplate = var.debian_template
+  ostype = "debian"
+  cores = 2
+  memory = 1024
+  disk_size = "16G"
+  ip_address = "10.10.10.10/24"
+  gateway = var.gateway_ip
+  nameserver = var.nameserver_ip
+  vlan_tag = 10
+  unprivileged = false
+  tags = ["automation", "iot", "home-assistant", "terraform"]
 }
 
 module "lxc_scrutiny" {
-  source       = "./modules/proxmox_lxc"
-  target_node  = var.primary_node
+  source = "./modules/proxmox_lxc"
+  target_node = var.primary_node
   vmid = 907
-  hostname     = "scrutiny"
-  ostemplate   = var.debian_template
-  ostype       = "debian"
-  cores        = 1
-  memory       = 128
-  disk_size    = "4G"
-  ip_address   = "10.10.10.11/24"
-  gateway      = var.gateway_ip
-  nameserver   = var.nameserver_ip
-  vlan_tag     = 20
-  unprivileged = true
-  tags         = ["monitoring", "smart", "storage", "telemetry", "terraform", "example-node"]
+  hostname = "scrutiny"
+  ostemplate = var.debian_template
+  ostype = "debian"
+  cores = 1
+  memory = 128
+  disk_size = "4G"
+  ip_address = "10.10.10.11/24"
+  gateway = var.gateway_ip
+  nameserver = var.nameserver_ip
+  vlan_tag = 10
+  tags = ["monitoring", "smart", "storage", "terraform"]
 }
 
 module "lxc_ollama" {
-  source                 = "./modules/proxmox_lxc"
-  target_node            = var.primary_node
+  source = "./modules/proxmox_lxc"
+  target_node = var.primary_node
   vmid = 908
-  hostname               = "ollama"
-  ostemplate             = var.debian_template
-  ostype                 = "debian"
-  cores                  = 4
-  memory                 = 2048
-  disk_size              = "16G"
-  ip_address             = "10.10.10.12/24"
-  gateway                = var.gateway_ip
-  nameserver             = var.nameserver_ip
-  vlan_tag               = 20
-  unprivileged           = false
-  passthrough_nvidia_gpu = true
-  tags                   = ["ai", "llm", "cuda", "gtx1050ti", "local-ai", "terraform", "example-node"]
+  hostname = "ollama"
+  ostemplate = var.debian_template
+  ostype = "debian"
+  cores = 4
+  memory = 2048
+  disk_size = "16G"
+  ip_address = "10.10.10.12/24"
+  gateway = var.gateway_ip
+  nameserver = var.nameserver_ip
+  vlan_tag = 10
+  unprivileged = false
+  tags = ["ai", "llm", "local-ai", "terraform"]
 }
 
 module "lxc_uptimekuma" {
-  source       = "./modules/proxmox_lxc"
-  target_node  = var.primary_node
+  source = "./modules/proxmox_lxc"
+  target_node = var.primary_node
   vmid = 909
-  hostname     = "uptimekuma"
-  ostemplate   = var.alpine_template
-  ostype       = "alpine"
-  cores        = 1
-  memory       = 128
-  disk_size    = "2G"
-  ip_address   = "10.10.10.13/24"
-  gateway      = var.gateway_ip
-  nameserver   = var.nameserver_ip
-  vlan_tag     = 20
-  unprivileged = true
-  tags         = ["monitoring", "uptime", "status", "terraform", "example-node"]
+  hostname = "uptimekuma"
+  ostemplate = var.alpine_template
+  ostype = "alpine"
+  cores = 1
+  memory = 128
+  disk_size = "2G"
+  ip_address = "10.10.10.13/24"
+  gateway = var.gateway_ip
+  nameserver = var.nameserver_ip
+  vlan_tag = 10
+  tags = ["monitoring", "uptime", "terraform"]
 }
 
 module "lxc_monitoring" {
-  source       = "./modules/proxmox_lxc"
-  target_node  = var.primary_node
+  source = "./modules/proxmox_lxc"
+  target_node = var.primary_node
   vmid = 910
-  hostname     = "monitoring"
-  ostemplate   = var.alpine_template
-  ostype       = "alpine"
-  cores        = 1
-  memory       = 256
-  disk_size    = "4G"
-  ip_address   = "10.10.10.14/24"
-  gateway      = var.gateway_ip
-  nameserver   = var.nameserver_ip
-  vlan_tag     = 20
-  unprivileged = true
-  tags         = ["monitoring", "prometheus", "grafana", "terraform", "example-node"]
+  hostname = "monitoring"
+  ostemplate = var.alpine_template
+  ostype = "alpine"
+  cores = 1
+  memory = 256
+  disk_size = "4G"
+  ip_address = "10.10.10.14/24"
+  gateway = var.gateway_ip
+  nameserver = var.nameserver_ip
+  vlan_tag = 10
+  tags = ["monitoring", "prometheus", "grafana", "terraform"]
 }
 
 module "lxc_owasp" {
-  source       = "./modules/proxmox_lxc"
-  target_node  = var.primary_node
+  source = "./modules/proxmox_lxc"
+  target_node = var.primary_node
   vmid = 911
-  hostname     = "owasp"
-  ostemplate   = var.alpine_template
-  ostype       = "alpine"
-  cores        = 2
-  memory       = 512
-  disk_size    = "8G"
-  ip_address   = "10.10.10.15/24"
-  gateway      = var.gateway_ip
-  nameserver   = var.nameserver_ip
-  vlan_tag     = 20
-  unprivileged = true
-  tags         = ["cyber", "owasp", "pentest", "security", "terraform", "example-node"]
+  hostname = "owasp"
+  ostemplate = var.alpine_template
+  ostype = "alpine"
+  cores = 2
+  memory = 512
+  disk_size = "8G"
+  ip_address = "10.10.10.15/24"
+  gateway = var.gateway_ip
+  nameserver = var.nameserver_ip
+  vlan_tag = 10
+  tags = ["cyber", "owasp", "pentest", "terraform"]
 }
 
 module "lxc_wazuh" {
-  source       = "./modules/proxmox_lxc"
-  target_node  = var.primary_node
+  source = "./modules/proxmox_lxc"
+  target_node = var.primary_node
   vmid = 912
-  hostname     = "wazuh"
-  ostemplate   = var.debian_template
-  ostype       = "ubuntu"
-  cores        = 4
-  memory       = 6144
-  disk_size    = "35G"
-  ip_address   = "10.10.10.16/24"
-  gateway      = var.gateway_ip
-  nameserver   = var.nameserver_ip
-  vlan_tag     = 20
-  unprivileged = true
-  tags         = ["cyber", "siem", "xdr", "wazuh", "terraform", "example-node"]
+  hostname = "wazuh"
+  ostemplate = var.debian_template
+  ostype = "debian"
+  cores = 4
+  memory = 6144
+  disk_size = "35G"
+  ip_address = "10.10.10.16/24"
+  gateway = var.gateway_ip
+  nameserver = var.nameserver_ip
+  vlan_tag = 10
+  unprivileged = false
+  tags = ["cyber", "siem", "xdr", "wazuh", "terraform"]
 }
 
-# ------------------------------------------------------------------------------
-# Enterprise Networking, Proxmox SDN, Dual-Firewall & Hybrid Cloud Tunnel
-# ==============================================================================
+module "lxc_mosquitto" {
+  source = "./modules/proxmox_lxc"
+  target_node = var.primary_node
+  vmid = 913
+  hostname = "mosquitto"
+  ostemplate = var.alpine_template
+  ostype = "alpine"
+  cores = 1
+  memory = 256
+  disk_size = "3G"
+  ip_address = "10.10.10.17/24"
+  gateway = var.gateway_ip
+  nameserver = var.nameserver_ip
+  vlan_tag = 10
+  tags = ["iot", "mqtt", "terraform"]
+}
 
+module "lxc_esphome" {
+  source = "./modules/proxmox_lxc"
+  target_node = var.primary_node
+  vmid = 914
+  hostname = "esphome"
+  ostemplate = var.debian_template
+  ostype = "debian"
+  cores = 2
+  memory = 1536
+  disk_size = "30G"
+  ip_address = "10.10.10.18/24"
+  gateway = var.gateway_ip
+  nameserver = var.nameserver_ip
+  vlan_tag = 10
+  unprivileged = false
+  tags = ["iot", "esphome", "terraform"]
+}
+
+# These modules currently expose design metadata only; they do not create
+# SDN zones, firewall rules or tunnels on the Proxmox/OPNsense appliances.
 module "proxmox_sdn" {
   source = "./modules/proxmox_sdn"
 }
@@ -303,6 +309,3 @@ module "proxmox_firewall" {
 module "hybrid_tunnel" {
   source = "./modules/hybrid_tunnel"
 }
-
-
-
