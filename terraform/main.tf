@@ -225,6 +225,8 @@ module "lxc_monitoring" {
   gateway = var.gateway_ip
   nameserver = var.nameserver_ip
   vlan_tag = 10
+  unprivileged = false
+  onboot = false
   tags = ["monitoring", "prometheus", "grafana", "terraform"]
 }
 
@@ -259,7 +261,7 @@ module "lxc_wazuh" {
   gateway = var.gateway_ip
   nameserver = var.nameserver_ip
   vlan_tag = 10
-  unprivileged = false
+  unprivileged = true
   tags = ["cyber", "siem", "xdr", "wazuh", "terraform"]
 }
 
