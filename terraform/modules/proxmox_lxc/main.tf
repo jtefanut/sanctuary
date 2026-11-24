@@ -60,6 +60,7 @@ resource "proxmox_virtual_environment_container" "container" {
 
   features {
     nesting = var.nesting
+    keyctl  = var.keyctl
   }
 
   lifecycle {
