@@ -70,7 +70,7 @@
       args:
         chdir: "{{ service_dir }}"
       register: monitoring_compose
-      changed_when: "'Created' in monitoring_compose.stdout or 'Started' in monitoring_compose.stdout or 'Recreated' in monitoring_compose.stdout
+      changed_when: "'Created' in monitoring_compose.stdout or 'Started' in monitoring_compose.stdout or 'Recreated' in monitoring_compose.stdout"
 
 - name: Deploy Home Assistant
   hosts: home_automation
@@ -103,4 +103,4 @@
       args:
         chdir: "{{ service_dir }}"
       register: homeassistant_compose
-      changed_when: "'Created' in homeassistant_compose.stdout or 'Started' in homeassistant_compose.stdout or 'Recreated' in homeassistant_compose.stdout
+      changed_when: "'Created' in homeassistant_compose.stdout or 'Started' in homeassistant_compose.stdout or 'Recreated' in homeassistant_compose.stdout"
