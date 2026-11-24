@@ -162,7 +162,7 @@ module "lxc_homeassistant" {
   nameserver = var.nameserver_ip
   ssh_public_keys = var.ssh_public_keys
   vlan_tag = 50
-  unprivileged = false
+  unprivileged = true
   tags = ["automation", "iot", "home-assistant", "terraform"]
 }
 
