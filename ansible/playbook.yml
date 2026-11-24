@@ -1,39 +1,104 @@
 ---
-- name: Deploy Services
-  hosts: all
+- name: Deploy observability stack
+  hosts: observability
   become: true
   vars:
-    base_path: /opt/homelab
-    homelab_services:
-      - grafana
-      - homeassistant
-      - prometheus
-
+    service_dir: /opt/homelab/monitoring
   tasks:
-    - name: Create service directories
+    - name: Verify Docker Engine and Compose plugin are installed
+      ansible.builtin.command: docker compose version
+      changed_when: false
+
+    - name: Require a Grafana administrator password
+      ansible.builtin.assert:
+        that:
+          - grafana_admin_password is defined
+          - grafana_admin_password | length >= 16
+        fail_msg: "Pass grafana_admin_password via Ansible Vault or --extra-vars (minimum 16 characters)."
+
+    - name: Create monitoring service directory
       ansible.builtin.file:
-        path: "{{ base_path }}/{{ item }}"
+        path: "{{ service_dir }}"
         state: directory
         owner: root
         group: root
-        mode: '0755'
-      loop: "{{ homelab_services }}"
+        mode: "0750"
 
-    - name: Copy docker-compose files
+    - name: Copy monitoring Compose definition
       ansible.builtin.copy:
-        src: "../services/{{ item }}/docker-compose.yml"
-        dest: "{{ base_path }}/{{ item }}/docker-compose.yml"
-        mode: '0644'
-      loop: "{{ homelab_services }}"
+        src: ../services/x64/monitoring/docker-compose.yml
+        dest: "{{ service_dir }}/docker-compose.yml"
+        owner: root
+        group: root
+        mode: "0644"
 
-    - name: Start services using Docker Compose V2
-      community.docker.docker_compose_v2:
-        project_src: "{{ base_path }}/{{ item }}"
-        state: present
-      loop: "{{ homelab_services }}"
+    - name: Copy Prometheus configuration
+      ansible.builtin.copy:
+        src: ../services/x64/monitoring/prometheus.yml
+        dest: "{{ service_dir }}/prometheus.yml"
+        owner: root
+        group: root
+        mode: "0644"
 
-- name: Configure Home Assistant LXC
-  hosts: all
+    - name: Install Loki configuration
+      ansible.builtin.copy:
+        src: ../services/x64/monitoring/loki-config.yaml
+        dest: "{{ service_dir }}/loki-config.yaml"
+        owner: root
+        group: root
+        mode: "0644"
+
+    - name: Install Promtail configuration
+      ansible.builtin.copy:
+        src: ../services/x64/monitoring/promtail-config.yaml
+        dest: "{{ service_dir }}/promtail-config.yaml"
+        owner: root
+        group: root
+        mode: "0644"
+
+    - name: Write private Compose environment file
+      ansible.builtin.copy:
+        content: "GRAFANA_ADMIN_PASSWORD={{ grafana_admin_password }}\n"
+        dest: "{{ service_dir }}/.env"
+        owner: root
+        group: root
+        mode: "0600"
+      no_log: true
+
+    - name: Start monitoring stack
+      ansible.builtin.command: docker compose up -d
+      args:
+        chdir: "{{ service_dir }}"
+      changed_when: true
+
+- name: Deploy Home Assistant
+  hosts: home_automation
   become: true
-  roles:
-    - home_assistant
+  vars:
+    service_dir: /opt/homelab/homeassistant
+  tasks:
+    - name: Verify Docker Engine and Compose plugin are installed
+      ansible.builtin.command: docker compose version
+      changed_when: false
+
+    - name: Create Home Assistant service directory
+      ansible.builtin.file:
+        path: "{{ service_dir }}"
+        state: directory
+        owner: root
+        group: root
+        mode: "0750"
+
+    - name: Copy Home Assistant Compose definition
+      ansible.builtin.copy:
+        src: ../services/x64/homeassistant/docker-compose.yml
+        dest: "{{ service_dir }}/docker-compose.yml"
+        owner: root
+        group: root
+        mode: "0644"
+
+    - name: Start Home Assistant
+      ansible.builtin.command: docker compose up -d
+      args:
+        chdir: "{{ service_dir }}"
+      changed_when: true
