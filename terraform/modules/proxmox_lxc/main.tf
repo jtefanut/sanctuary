@@ -7,12 +7,15 @@ terraform {
     }
   }
 }
+
 resource "proxmox_virtual_environment_container" "container" {
-  node_name    = var.target_node
-  vm_id        = var.vmid
-  unprivileged = var.unprivileged
-  tags         = var.tags
-  started      = true
+  node_name     = var.target_node
+  vm_id         = var.vmid
+  unprivileged  = var.unprivileged
+  tags          = var.tags
+  started       = true
+  start_on_boot = var.onboot
+
   initialization {
     hostname = var.hostname
     ip_config {
@@ -28,30 +31,37 @@ resource "proxmox_virtual_environment_container" "container" {
       keys = var.ssh_public_keys
     }
   }
+
   cpu {
     cores = var.cores
   }
+
   memory {
     dedicated = var.memory
     swap      = var.swap
   }
+
   disk {
     datastore_id = var.storage_pool
     size         = tonumber(replace(var.disk_size, "G", ""))
   }
+
   network_interface {
     name     = "eth0"
     bridge   = var.bridge
     vlan_id  = var.vlan_tag
     firewall = true
   }
+
   operating_system {
     template_file_id = var.ostemplate
     type             = var.ostype
   }
+
   features {
     nesting = var.nesting
   }
+
   lifecycle {
     ignore_changes = [
       initialization[0].user_account[0].password
