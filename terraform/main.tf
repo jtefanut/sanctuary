@@ -146,7 +146,7 @@ module "vm_remnux_205" {
   tags = ["cyber", "dfir", "malware-analysis", "terraform"]
 }
 
-# LXC VMIDs 906-914. Shared services use VLAN 10; HA and IoT use VLAN 50.
+# LXC VMIDs 906-914 (908 intentionally unused). Shared services use VLAN 10; HA and IoT use VLAN 50.
 module "lxc_homeassistant" {
   source = "./modules/proxmox_lxc"
   target_node = var.primary_node
@@ -185,25 +185,7 @@ module "lxc_scrutiny" {
   tags = ["monitoring", "smart", "storage", "terraform"]
 }
 
-module "lxc_ollama" {
-  source = "./modules/proxmox_lxc"
-  target_node = var.primary_node
-  vmid = 908
-  hostname = "ollama"
-  ostemplate = var.debian_template
-  ostype = "debian"
-  cores = 4
-  memory = 2048
-  disk_size = "16G"
-  ip_address = "10.10.10.12/24"
-  gateway = var.gateway_ip
-  nameserver = var.nameserver_ip
-  ssh_public_keys = var.ssh_public_keys
-  vlan_tag = 10
-  unprivileged = false
-  device_passthrough = var.nvidia_device_paths
-  tags = ["ai", "llm", "local-ai", "terraform"]
-}
+
 
 module "lxc_uptimekuma" {
   source = "./modules/proxmox_lxc"
