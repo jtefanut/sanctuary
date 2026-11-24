@@ -61,7 +61,12 @@ module "vm_opnsense_900" {
   balloon = 1024
   disk_size = 16
   storage_pool = "local-lvm"
-  vlan_tag = 10
+  iso_file_id = "local:iso/OPNsense-dvd-amd64.iso"
+  network_devices = [
+    { bridge = "vmbr1", firewall = false, mac_address = "02:00:00:00:00:01" },
+    { bridge = "vmbr0", firewall = false, mac_address = "02:00:00:00:00:02" },
+    { bridge = "vmbr2", firewall = false, mac_address = "02:00:00:00:00:03" }
+  ]
   os_type = "other"
   tags = ["firewall", "security", "opnsense", "suricata", "terraform"]
 }
