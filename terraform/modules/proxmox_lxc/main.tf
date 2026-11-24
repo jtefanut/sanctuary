@@ -53,6 +53,13 @@ resource "proxmox_virtual_environment_container" "container" {
     firewall = true
   }
 
+  dynamic "device_passthrough" {
+    for_each = var.device_passthrough
+    content {
+      path = device_passthrough.value
+    }
+  }
+
   operating_system {
     template_file_id = var.ostemplate
     type             = var.ostype
