@@ -69,7 +69,8 @@
       ansible.builtin.command: docker compose up -d
       args:
         chdir: "{{ service_dir }}"
-      changed_when: true
+      register: monitoring_compose
+      changed_when: "'Created' in monitoring_compose.stdout or 'Started' in monitoring_compose.stdout or 'Recreated' in monitoring_compose.stdout
 
 - name: Deploy Home Assistant
   hosts: home_automation
@@ -101,4 +102,5 @@
       ansible.builtin.command: docker compose up -d
       args:
         chdir: "{{ service_dir }}"
-      changed_when: true
+      register: homeassistant_compose
+      changed_when: "'Created' in homeassistant_compose.stdout or 'Started' in homeassistant_compose.stdout or 'Recreated' in homeassistant_compose.stdout
