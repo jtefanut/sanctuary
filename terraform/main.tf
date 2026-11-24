@@ -159,6 +159,7 @@ module "lxc_homeassistant" {
   ip_address = "10.10.10.10/24"
   gateway = var.gateway_ip
   nameserver = var.nameserver_ip
+  ssh_public_keys = var.ssh_public_keys
   vlan_tag = 10
   unprivileged = false
   tags = ["automation", "iot", "home-assistant", "terraform"]
@@ -177,6 +178,7 @@ module "lxc_scrutiny" {
   ip_address = "10.10.10.11/24"
   gateway = var.gateway_ip
   nameserver = var.nameserver_ip
+  ssh_public_keys = var.ssh_public_keys
   vlan_tag = 10
   tags = ["monitoring", "smart", "storage", "terraform"]
 }
@@ -194,6 +196,7 @@ module "lxc_ollama" {
   ip_address = "10.10.10.12/24"
   gateway = var.gateway_ip
   nameserver = var.nameserver_ip
+  ssh_public_keys = var.ssh_public_keys
   vlan_tag = 10
   unprivileged = false
   tags = ["ai", "llm", "local-ai", "terraform"]
@@ -212,6 +215,7 @@ module "lxc_uptimekuma" {
   ip_address = "10.10.10.13/24"
   gateway = var.gateway_ip
   nameserver = var.nameserver_ip
+  ssh_public_keys = var.ssh_public_keys
   vlan_tag = 10
   tags = ["monitoring", "uptime", "terraform"]
 }
@@ -229,6 +233,7 @@ module "lxc_monitoring" {
   ip_address = "10.10.10.14/24"
   gateway = var.gateway_ip
   nameserver = var.nameserver_ip
+  ssh_public_keys = var.ssh_public_keys
   vlan_tag = 10
   unprivileged = false
   onboot = false
@@ -248,6 +253,7 @@ module "lxc_owasp" {
   ip_address = "10.10.10.15/24"
   gateway = var.gateway_ip
   nameserver = var.nameserver_ip
+  ssh_public_keys = var.ssh_public_keys
   vlan_tag = 10
   tags = ["cyber", "owasp", "pentest", "terraform"]
 }
@@ -265,6 +271,7 @@ module "lxc_wazuh" {
   ip_address = "10.10.10.16/24"
   gateway = var.gateway_ip
   nameserver = var.nameserver_ip
+  ssh_public_keys = var.ssh_public_keys
   vlan_tag = 10
   unprivileged = true
   tags = ["cyber", "siem", "xdr", "wazuh", "terraform"]
@@ -283,6 +290,7 @@ module "lxc_mosquitto" {
   ip_address = "10.10.10.17/24"
   gateway = var.gateway_ip
   nameserver = var.nameserver_ip
+  ssh_public_keys = var.ssh_public_keys
   vlan_tag = 10
   onboot = false
   tags = ["iot", "mqtt", "terraform"]
@@ -301,6 +309,7 @@ module "lxc_esphome" {
   ip_address = "10.10.10.18/24"
   gateway = var.gateway_ip
   nameserver = var.nameserver_ip
+  ssh_public_keys = var.ssh_public_keys
   vlan_tag = 10
   unprivileged = false
   onboot = false
