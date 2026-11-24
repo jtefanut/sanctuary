@@ -20,6 +20,10 @@ scrape_configs:
     static_configs:
       - targets: ["loki:3100"]
 
+  - job_name: grafana-alloy
+    static_configs:
+      - targets: ["alloy:12345"]
+
   - job_name: node1-pve-x64
     static_configs:
       - targets: ["10.10.10.22:9100"]
