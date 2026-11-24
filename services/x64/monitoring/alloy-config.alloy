@@ -5,6 +5,11 @@ local.file_match "host_logs" {
       job      = "varlogs"
       host     = "monitoring"
     },
+    {
+      __path__ = "/var/log/messages"
+      job      = "syslog"
+      host     = "monitoring"
+    },
   ]
 }
 
