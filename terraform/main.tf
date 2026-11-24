@@ -155,6 +155,7 @@ module "lxc_homeassistant" {
   ostype = "debian"
   cores = 2
   memory = 1024
+  swap = 1024
   disk_size = "16G"
   ip_address = "10.10.50.10/24"
   gateway = var.iot_gateway_ip
@@ -230,6 +231,7 @@ module "lxc_monitoring" {
   ostype = "alpine"
   cores = 1
   memory = 256
+  swap = 128
   disk_size = "4G"
   ip_address = "10.10.10.14/24"
   gateway = var.gateway_ip
@@ -268,6 +270,7 @@ module "lxc_wazuh" {
   ostype = "debian"
   cores = 4
   memory = 6144
+  swap = 4096
   disk_size = "35G"
   ip_address = "10.10.10.16/24"
   gateway = var.gateway_ip
@@ -287,6 +290,7 @@ module "lxc_mosquitto" {
   ostype = "alpine"
   cores = 1
   memory = 256
+  swap = 128
   disk_size = "3G"
   ip_address = "10.10.50.17/24"
   gateway = var.iot_gateway_ip
