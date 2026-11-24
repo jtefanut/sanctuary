@@ -62,6 +62,7 @@ module "vm_opnsense_900" {
   disk_size = 16
   storage_pool = "local-lvm"
   vlan_tag = 10
+  os_type = "other"
   tags = ["firewall", "security", "opnsense", "suricata", "terraform"]
 }
 
@@ -276,6 +277,7 @@ module "lxc_mosquitto" {
   gateway = var.gateway_ip
   nameserver = var.nameserver_ip
   vlan_tag = 10
+  onboot = false
   tags = ["iot", "mqtt", "terraform"]
 }
 
@@ -294,6 +296,7 @@ module "lxc_esphome" {
   nameserver = var.nameserver_ip
   vlan_tag = 10
   unprivileged = false
+  onboot = false
   tags = ["iot", "esphome", "terraform"]
 }
 
