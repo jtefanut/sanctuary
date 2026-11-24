@@ -199,6 +199,7 @@ module "lxc_ollama" {
   ssh_public_keys = var.ssh_public_keys
   vlan_tag = 10
   unprivileged = false
+  device_passthrough = var.nvidia_device_paths
   tags = ["ai", "llm", "local-ai", "terraform"]
 }
 
@@ -313,6 +314,7 @@ module "lxc_esphome" {
   vlan_tag = 10
   unprivileged = false
   onboot = false
+  device_passthrough = ["/dev/net/tun"]
   tags = ["iot", "esphome", "terraform"]
 }
 
