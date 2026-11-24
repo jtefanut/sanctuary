@@ -1,7 +1,8 @@
 # Homelab infrastructure - single active Terraform root.
 # Run Terraform from this directory: terraform init && terraform validate.
-# All service LXCs use the management subnet until dedicated routed VLAN
-# interfaces are configured on OPNsense and the Proxmox bridge.
+# VLAN/network modules describe the intended topology; they do not configure
+# switch trunks, OPNsense interfaces, DHCP, routing or Proxmox SDN resources.
+# Service LXCs are currently attached to the management subnet (VLAN 10).
 
 module "vlan_10_mgmt" {
   source = "./modules/network_segment"
