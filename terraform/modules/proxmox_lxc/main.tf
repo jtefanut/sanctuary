@@ -28,7 +28,8 @@ resource "proxmox_virtual_environment_container" "container" {
       servers = [var.nameserver]
     }
     user_account {
-      keys = var.ssh_public_keys
+      username = "root"
+      keys     = var.ssh_public_keys
     }
   }
 
