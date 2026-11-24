@@ -40,7 +40,7 @@
       changed_when: false
 
     - name: Verify Docker Compose is available
-      ansible.builtin.command: docker-compose version
+      ansible.builtin.command: docker compose version
       changed_when: false
 
     - name: Require a Grafana administrator password
@@ -140,7 +140,7 @@
       no_log: true
 
     - name: Start monitoring stack
-      ansible.builtin.command: docker-compose up -d
+      ansible.builtin.command: docker compose up -d
       args:
         chdir: "{{ service_dir }}"
       register: monitoring_compose
@@ -187,7 +187,7 @@
       changed_when: false
 
     - name: Verify Docker Compose is available
-      ansible.builtin.command: docker-compose version
+      ansible.builtin.command: docker compose version
       changed_when: false
 
     - name: Create Home Assistant service directory
@@ -207,7 +207,7 @@
         mode: "0644"
 
     - name: Start Home Assistant
-      ansible.builtin.command: docker-compose up -d
+      ansible.builtin.command: docker compose up -d
       args:
         chdir: "{{ service_dir }}"
       register: homeassistant_compose
