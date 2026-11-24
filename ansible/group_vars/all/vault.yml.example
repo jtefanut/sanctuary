@@ -1,0 +1,4 @@
+# Copy to vault.yml, replace both values, then encrypt with:
+# ansible-vault encrypt ansible/group_vars/all/vault.yml
+grafana_admin_password: "REPLACE_WITH_A_RANDOM_PASSWORD_AT_LEAST_16_CHARS"
+vault_windows_admin_password: "REPLACE_WITH_WINDOWS_ADMIN_PASSWORD"
