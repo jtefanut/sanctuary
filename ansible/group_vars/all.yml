@@ -7,20 +7,9 @@ docker_network_name: "homelab.example"
 default_timezone: "Europe/Bucharest"
 manage_python: true
 
-homelab_services:
-  - actualbudget
-  - alist
-  - changedetection.io
-  - crowdsec
-  - filebrowser
+services:
   - grafana
   - homeassistant
-  - nginx
-  - pi-hole
   - prometheus
-  - scrutiny
-  - trillium-notes
-  - uptime-kuma
-  - vaultwarden
 
 deploy_user: "ansible"
