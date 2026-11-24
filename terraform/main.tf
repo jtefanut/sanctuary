@@ -50,7 +50,7 @@ module "vlan_50_iot" {
 }
 
 # VMID allocation: 900-905. Except OPNsense, these VM modules create blank disks\n# until an OS ISO or imported disk image is supplied.
-module "vm_opnsense_900" {
+module "vm_opnsense_200" {
   source = "./modules/proxmox_vm"
   target_node = var.primary_node
   vmid = 900
@@ -71,7 +71,7 @@ module "vm_opnsense_900" {
   tags = ["firewall", "security", "opnsense", "suricata", "terraform"]
 }
 
-module "vm_openstack_901" {
+module "vm_openstack_201" {
   source = "./modules/proxmox_vm"
   target_node = var.primary_node
   vmid = 901
@@ -86,7 +86,7 @@ module "vm_openstack_901" {
   tags = ["openstack", "cloud", "iaas", "terraform"]
 }
 
-module "vm_metasploitable2_902" {
+module "vm_metasploitable2_202" {
   source = "./modules/proxmox_vm"
   target_node = var.primary_node
   vmid = 902
@@ -100,7 +100,7 @@ module "vm_metasploitable2_902" {
   tags = ["cyber", "metasploit", "penetration-testing", "terraform"]
 }
 
-module "vm_tpot_903" {
+module "vm_tpot_203" {
   source = "./modules/proxmox_vm"
   target_node = var.primary_node
   vmid = 903
@@ -115,7 +115,7 @@ module "vm_tpot_903" {
   tags = ["cyber", "honeypot", "tpot", "terraform"]
 }
 
-module "vm_securityonion_904" {
+module "vm_securityonion_204" {
   source = "./modules/proxmox_vm"
   target_node = var.primary_node
   vmid = 904
@@ -130,7 +130,7 @@ module "vm_securityonion_904" {
   tags = ["blue-team", "security-onion", "siem", "terraform"]
 }
 
-module "vm_remnux_905" {
+module "vm_remnux_205" {
   source = "./modules/proxmox_vm"
   target_node = var.primary_node
   vmid = 905
@@ -238,7 +238,7 @@ module "lxc_monitoring" {
   nameserver = var.nameserver_ip
   ssh_public_keys = var.ssh_public_keys
   vlan_tag = 10
-  unprivileged = false
+  unprivileged = true
   onboot = false
   tags = ["monitoring", "prometheus", "grafana", "terraform"]
 }
