@@ -50,3 +50,9 @@ variable "ssh_public_keys" {
   description = "Public SSH keys injected into LXC root accounts; set via private tfvars or TF_VAR_ssh_public_keys."
   default     = []
 }
+
+variable "nvidia_device_paths" {
+  type        = list(string)
+  description = "Existing NVIDIA device nodes on the Proxmox host to pass into Ollama LXC."
+  default     = []
+}
