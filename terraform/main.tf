@@ -72,16 +72,6 @@ module "vm_opnsense_200" {
   tags = ["firewall", "security", "opnsense", "suricata", "terraform"]
 }
 
-
-
-
-
-
-
-
-
-
-
 # Active LXC guests only: Home Assistant, Monitoring, Wazuh, Mosquitto and ESPHome.
 module "vm_malware_analysis" {
   source = "./modules/proxmox_vm"
@@ -95,7 +85,11 @@ module "vm_malware_analysis" {
   balloon = 0
   disk_size = 50
   storage_pool = "local-lvm"
-  bridge = "vmbr0"
+  network_devices = [
+    { bridge = "vmbr0", firewall = true, mac_address = "02:00:00:00:00:07" }
+  ]
+  cpu_type = "x86-64-v2-AES"
+  onboot = false
   tags = ["windows", "windows10", "malware-analysis", "sandbox", "terraform"]
 }
 
@@ -119,12 +113,6 @@ module "lxc_homeassistant" {
   tags = ["automation", "iot", "home-assistant", "terraform"]
 }
 
-
-
-
-
-
-
 module "lxc_monitoring" {
   source = "./modules/proxmox_lxc"
   target_node = var.primary_node
@@ -145,8 +133,6 @@ module "lxc_monitoring" {
   onboot = false
   tags = ["monitoring", "prometheus", "grafana", "terraform"]
 }
-
-
 
 module "lxc_wazuh" {
   source = "./modules/proxmox_lxc"
