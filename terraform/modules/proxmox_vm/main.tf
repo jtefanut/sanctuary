@@ -7,7 +7,6 @@ terraform {
     }
   }
 }
-
 resource "proxmox_virtual_environment_vm" "vm" {
   node_name   = var.target_node
   vm_id       = var.vmid
@@ -16,32 +15,27 @@ resource "proxmox_virtual_environment_vm" "vm" {
   tags        = var.tags
   on_boot     = var.onboot
   started     = true
-
   agent {
     enabled = true
     timeout = "10m"
   }
-
   cpu {
     cores   = var.cores
     sockets = var.sockets
     type    = var.cpu_type
   }
-
   memory {
     dedicated = var.memory
     floating  = var.balloon > 0 ? var.balloon : var.memory
   }
-
   disk {
     datastore_id = var.storage_pool
     size         = var.disk_size
-    interface    = "scsihw0"
+    interface    = "scsi0"
     iothread     = true
     discard      = "on"
     ssd          = true
   }
-
   network_device {
     bridge      = var.bridge
     vlan_id     = var.vlan_tag
@@ -49,11 +43,9 @@ resource "proxmox_virtual_environment_vm" "vm" {
     mac_address = var.mac_address != "" ? var.mac_address : null
     firewall    = true
   }
-
   operating_system {
     type = "l26"
   }
-
   dynamic "hostpci" {
     for_each = var.pci_passthrough_device != "" ? [1] : []
     content {
@@ -62,9 +54,5 @@ resource "proxmox_virtual_environment_vm" "vm" {
       pcie   = true
       rombar = true
     }
-  }
-
-  lifecycle {
-    prevent_destroy = false
   }
 }
