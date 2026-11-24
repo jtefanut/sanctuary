@@ -1,7 +1,3 @@
----
-# ==============================================================================
-# GLOBAL HOMELAB ANSIBLE VARIABLES (LAYER 1: GLOBAL CONFIG)
-# ==============================================================================
 
 # Timezone & Localization
 system_timezone: "Europe/Bucharest"
