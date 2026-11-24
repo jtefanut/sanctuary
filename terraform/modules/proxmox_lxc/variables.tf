@@ -97,6 +97,11 @@ variable "nesting" {
   type    = bool
   default = true
 }
+variable "keyctl" {
+  type        = bool
+  description = "Enable keyctl for nested container runtimes where required."
+  default     = true
+}
 variable "onboot" {
   type        = bool
   description = "Start this container automatically when the Proxmox node boots."
