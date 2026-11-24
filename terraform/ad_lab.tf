@@ -1,8 +1,6 @@
 # Only the two installed Windows Server guests and the Windows 10 client remain.
 # Existing module addresses and VMIDs are retained to avoid Terraform state churn.
 
-
-
 module "vm_ad2022" {
   source = "./modules/proxmox_vm"
   target_node = var.primary_node
@@ -18,8 +16,6 @@ module "vm_ad2022" {
   onboot = false
   tags = ["active-directory", "domain-controller", "server2022", "terraform", "windows"]
 }
-
-
 
 module "vm_ad2016" {
   source = "./modules/proxmox_vm"
@@ -37,10 +33,6 @@ module "vm_ad2016" {
   tags = ["active-directory", "domain-controller", "server2016", "terraform", "windows"]
 }
 
-
-
-
-
 module "vm_adwin10" {
   source = "./modules/proxmox_vm"
   target_node = var.primary_node
@@ -56,11 +48,4 @@ module "vm_adwin10" {
   onboot = false
   tags = ["active-directory", "client", "windows10", "terraform"]
 }
-
-
-
-
-
-
-
 
